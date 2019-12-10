@@ -1,3 +1,6 @@
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
@@ -17,6 +20,10 @@ import { metaReducers, reducers } from './store/store';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {

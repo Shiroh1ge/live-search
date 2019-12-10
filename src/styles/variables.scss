@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$app-primary: mat-palette($mat-blue);
+$app-accent:  mat-palette($mat-pink, A400, 900, A100);;
+$app-warn: mat-palette($mat-deep-orange);
+
+$app-theme: mat-dark-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($app-theme);
+
+// Export theme colors
+$primary: mat-color($app-primary);
+$primary-0: mat-color($app-primary, 700);
+
+$accent: mat-color($app-accent);
+$warn: mat-color($app-warn);
+$primary-bg: #e9e9e9;
+
+$header-height: 50px;
+$page-padding: 10px;
