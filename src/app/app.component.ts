@@ -26,7 +26,7 @@ export class AppComponent {
         [MediaFilterType.IMAGE]: 'Image'
     };
     public sortingTypesTextMap = {
-        [MediaSortingType.BY_NAME]: 'By Name',
+        [MediaSortingType.BY_NAME]: 'Alphabetical',
         [MediaSortingType.BY_DATE]: 'By Date'
     };
     public MediaFilterTypes = MediaFilterTypes;
