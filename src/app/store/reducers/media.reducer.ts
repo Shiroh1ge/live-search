@@ -1,5 +1,7 @@
 import { Action, createReducer, createSelector, on } from '@ngrx/store';
+import { MediaFilesMockData } from '../../data/data';
 import { MediaFilterType } from '../../enums/media-file-type.enum';
+import { MediaSortingDirection } from '../../enums/media-sorting-direction.enum';
 import { MediaSortingType } from '../../enums/media-sorting-type.enum';
 import { MediaFile } from '../../models/media-file.model';
 import { MediaActions } from '../actions/media.actions';
@@ -10,38 +12,15 @@ export interface MediaState {
     searchTerm: string;
     selectedFilter: MediaFilterType;
     selectedSortingType: MediaSortingType;
+    selectedSortingDirection: MediaSortingDirection;
 }
 
 export const mediaInitialState: MediaState = {
-    media: [
-        {
-            type: MediaFilterType.IMAGE,
-            fileName: 'background-2.jpg'
-        },
-        {
-            type: MediaFilterType.IMAGE,
-            fileName: 'background-2.jpg'
-        },
-        {
-            type: MediaFilterType.IMAGE,
-            fileName: 'background-3.jpg'
-        },
-        {
-            type: MediaFilterType.VIDEO,
-            fileName: 'video-1.mp4'
-        },
-        {
-            type: MediaFilterType.VIDEO,
-            fileName: 'video-2.mp4'
-        },
-        {
-            type: MediaFilterType.VIDEO,
-            fileName: 'video-3.mp4'
-        }
-    ],
+    media: MediaFilesMockData,
     searchTerm: '',
     selectedFilter: MediaFilterType.ALL,
-    selectedSortingType: MediaSortingType.BY_NAME
+    selectedSortingType: MediaSortingType.BY_NAME,
+    selectedSortingDirection: MediaSortingDirection.ASCENDING
 };
 
 const reducer = createReducer(
@@ -53,6 +32,21 @@ const reducer = createReducer(
     on(MediaActions.setFilter, (state, { payload }): MediaState => ({
         ...state,
         selectedFilter: payload
+    })),
+    on(MediaActions.setSortingType, (state, { payload }): MediaState => ({
+        ...state,
+        selectedSortingType: payload
+    })),
+    on(MediaActions.setSortingDirection, (state, { payload }): MediaState => ({
+        ...state,
+        selectedSortingDirection: payload
+    })),
+    on(MediaActions.clearFilters, (state, { payload }): MediaState => ({
+        ...state,
+        searchTerm: mediaInitialState.searchTerm,
+        selectedFilter: mediaInitialState.selectedFilter,
+        selectedSortingType: mediaInitialState.selectedSortingType,
+        selectedSortingDirection: mediaInitialState.selectedSortingDirection
     }))
 );
 
@@ -65,20 +59,11 @@ const getMediaFiles = (state: GlobalState) => state.media.media;
 const getSearchTerm = (state: GlobalState) => state.media.searchTerm;
 const getSelectedFilter = (state: GlobalState) => state.media.selectedFilter;
 const getSortingType = (state: GlobalState) => state.media.selectedSortingType;
+const getSortingDirection = (state: GlobalState) => state.media.selectedSortingDirection;
 
-export const mediaFiles = createSelector([getMediaFiles, getSearchTerm, getSelectedFilter, getSortingType],
-    (mediaFiles, searchTerm, selectedFilter, sortingType) => {
-        let result = [...mediaFiles];
-        let term = new RegExp(searchTerm, 'i');
-        result = result.filter(mediaFile => term.test(mediaFile.fileName));
-
-       if (selectedFilter !== MediaFilterType.ALL) {
-           result = result.filter(mediaFile => mediaFile.type === selectedFilter);
-       }
-
-        return result;
-    });
-
+export const mediaFiles = createSelector([getMediaFiles], (mediaFiles) => mediaFiles);
+export const searchTermSelector = createSelector([getSearchTerm], filter => filter);
 export const selectedFilterSelector = createSelector([getSelectedFilter], filter => filter);
-export const selectedSortingType = createSelector([getSortingType], filter => filter);
+export const selectedSortingTypeSelectors = createSelector([getSortingType], sortingType => sortingType);
+export const selectedSortingDirectionSelector = createSelector([getSortingDirection], sortingDirection => sortingDirection);
 

@@ -67,12 +67,51 @@
                         <mat-icon *ngIf="filterDropdownVisible">keyboard_arrow_left</mat-icon>
                     </div>
 
+                    <div class="sort-wrapper" (click)="toggleSortDropdownVisible()">
+                        <div class="filter-container">
+                            <span class="menu-name">Sort By:</span>
+                            <h3 class="menu-type">{{sortingTypesTextMap[selectedSortingType]}}</h3>
+
+                            <div class="sort-dropdown" *ngIf="sortDropdownVisible">
+                                <ul class="filter-list">
+                                    <li class="filter"
+                                        [ngClass]="{selected: selectedSortingType === sortingType}"
+                                        *ngFor="let sortingType of MediaSortingTypes"
+                                        (click)="setSortingType(sortingType)">
+                                        {{sortingTypesTextMap[sortingType]}}
+
+                                        <mat-icon *ngIf="selectedSortingType === sortingType" style="color: green">done</mat-icon>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <mat-icon *ngIf="!sortDropdownVisible">keyboard_arrow_down</mat-icon>
+                        <mat-icon *ngIf="sortDropdownVisible">keyboard_arrow_left</mat-icon>
+                    </div>
+
+                    <div class="clear-icon-container" (click)="resetFilters()">
+                        <mat-icon class="clear-icon">add_circle_outline</mat-icon>
+                        <span class="clear-text">Clear</span>
+                    </div>
+                    <div class="sort-direction-wrapper" (click)="toggleSortDirection()">
+                        <div class="icon-container" >
+                            <mat-icon class="sort-icon">sort</mat-icon>
+                            <mat-icon class="direction-icon"
+                                      [ngClass]="{
+                                        'up': selectedSortingDirection === MediaSortingDirection.ASCENDING
+                                      }">arrow_right_alt</mat-icon>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="results">
-                    <div class="media-item" *ngFor="let item of mediaFiles">
-                        <span>{{item.fileName}}</span>
-                    </div>
+                    <ul class="media-item-list">
+                        <li class="media-item" *ngFor="let item of mediaFiles">
+                            <b>{{item.fileName}}</b>
+                            -
+                            <span>{{item.createdAt | date}}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
