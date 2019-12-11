@@ -8,7 +8,7 @@ import { MediaActions } from '../actions/media.actions';
 import { GlobalState } from '../store';
 
 export interface MediaState {
-    media: MediaFile[];
+    mediaFiles: MediaFile[];
     searchTerm: string;
     selectedFilter: MediaFilterType;
     selectedSortingType: MediaSortingType;
@@ -16,7 +16,7 @@ export interface MediaState {
 }
 
 export const mediaInitialState: MediaState = {
-    media: MediaFilesMockData,
+    mediaFiles: [],
     searchTerm: '',
     selectedFilter: MediaFilterType.ALL,
     selectedSortingType: MediaSortingType.BY_NAME,
@@ -25,6 +25,10 @@ export const mediaInitialState: MediaState = {
 
 const reducer = createReducer(
     mediaInitialState,
+    on(MediaActions.getMediaFilesSuccess, (state, { payload }): MediaState => ({
+        ...state,
+        mediaFiles: payload
+    })),
     on(MediaActions.searchMedia, (state, { payload }): MediaState => ({
         ...state,
         searchTerm: payload
@@ -41,7 +45,7 @@ const reducer = createReducer(
         ...state,
         selectedSortingDirection: payload
     })),
-    on(MediaActions.clearFilters, (state, { payload }): MediaState => ({
+    on(MediaActions.clearFilters, (state): MediaState => ({
         ...state,
         searchTerm: mediaInitialState.searchTerm,
         selectedFilter: mediaInitialState.selectedFilter,
@@ -55,7 +59,7 @@ export function mediaReducer(state: MediaState | undefined, action: Action) {
     return reducer(state, action);
 }
 
-const getMediaFiles = (state: GlobalState) => state.media.media;
+const getMediaFiles = (state: GlobalState) => state.media.mediaFiles;
 const getSearchTerm = (state: GlobalState) => state.media.searchTerm;
 const getSelectedFilter = (state: GlobalState) => state.media.selectedFilter;
 const getSortingType = (state: GlobalState) => state.media.selectedSortingType;

@@ -3,7 +3,17 @@ import { createAction, props, Store } from '@ngrx/store';
 import { MediaFilterType } from '../../enums/media-file-type.enum';
 import { MediaSortingDirection } from '../../enums/media-sorting-direction.enum';
 import { MediaSortingType } from '../../enums/media-sorting-type.enum';
+import { MediaFile } from '../../models/media-file.model';
 import { GlobalState } from '../store';
+
+const getMediaFiles = createAction(
+    'GET_MEDIA_FILES'
+);
+
+const getMediaFilesSuccess = createAction(
+    'GET_MEDIA_FILES_SUCCESS',
+    props<{ payload: MediaFile[] }>()
+);
 
 const searchMedia = createAction(
     'SEARCH_MEDIA',
@@ -32,6 +42,8 @@ const clearFilters = createAction(
 
 @Injectable({ providedIn: 'root' })
 export class MediaActions {
+    public static getMediaFiles = getMediaFiles;
+    public static getMediaFilesSuccess = getMediaFilesSuccess;
     public static searchMedia = searchMedia;
     public static setFilter = setFilter;
     public static setSortingType = setSortingType;
@@ -40,6 +52,10 @@ export class MediaActions {
 
     constructor(private store: Store<GlobalState>) {
 
+    }
+
+    public getMediaFilesDispatch() {
+        return this.store.dispatch(MediaActions.getMediaFiles());
     }
 
     public searchMediaDispatch(term: string) {

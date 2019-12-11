@@ -68,6 +68,8 @@ export class AppComponent {
     }
 
     ngOnInit() {
+        this.mediaActions.getMediaFilesDispatch();
+
         combineLatest(this.mediaSelectors.mediaFiles$,
             this.mediaSelectors.searchTerm$,
             this.mediaSelectors.selectedFilter$,
